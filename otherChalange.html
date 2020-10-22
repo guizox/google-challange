@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desafio google</title>
+  </head>
+  <body>
+    <script>
+      /*
+        Write a funcion that takes two strings, s1 and s2
+        an returns the longest common subsequence of s1 and s2;
+
+        "ABAZDC", "BACBAD" => "ABAD"
+        "AGGTAB", "GXTXAYB" => "GTAB"
+        "aaaa", "aa" => "aa"
+     */
+
+      const reduceIntoSmallerString = (val) =>
+        val
+          .split("")
+          .reduce(
+            (acc, cur) =>
+              (acc === cur && !acc.includes(cur)) || acc === ""
+                ? acc + cur
+                : acc,
+            ""
+          );
+
+      const shortenBetweenToStrings = (s1, s2) => {
+        const reducedS1 = reduceIntoSmallerString(s1);
+        const reducedS2 = reduceIntoSmallerString(s2);
+
+        if (
+          reducedS1.length === 1 &&
+          reducedS2.length === 1 &&
+          reducedS1 === reducedS2
+        )
+          return s1.length >= s2.length ? s2 : s1;
+
+        let indexForTheFirstLetter = 0;
+
+        const longgest = s1.length >= s2.length ? s1 : s2;
+        const smaller = s1.length >= s2.length ? s2 : s1;
+
+        for (let i = 0; i < smaller.split("").length; i++) {
+          if (smaller.split("")[i] === longgest.substr(0, 1)) {
+            indexForTheFirstLetter = i;
+            break;
+          }
+        }
+
+        let stringToCompare = smaller.substr(
+          indexForTheFirstLetter,
+          smaller.length
+        );
+
+        const longgestArray = longgest.split("");
+
+        return longgestArray.reduce((acc, cur) => {
+          if (stringToCompare.includes(cur)) {
+            stringToCompare = stringToCompare.substr(1, stringToCompare.length);
+            return acc + cur;
+          }
+          return acc;
+        }, "");
+      };
+
+      console.log(shortenBetweenToStrings("ABAZDC", "BACBAD"));
+      console.log(shortenBetweenToStrings("AGGTAB", "GXTXAYB"));
+
+      console.log(shortenBetweenToStrings("aaaa", "aa"));
+    </script>
+  </body>
+</html>
